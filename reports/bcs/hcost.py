@@ -45,9 +45,3 @@ def hcost(lines):
     for r in rows:
         if r[4] is None: r[4]=r[3]*ratio
     return tot,sum(r[4] for r in rows),ps,pc,ratio,rows
-if __name__=='__main__':
-    import costs as K
-    _,qh=K.split(K.ql)
-    t,c,ps,pc,ratio,rows=hcost(qh)
-    print(round(t),round(c),'priced share',round(ps/t*100,1),'priced GP%',round((1-pc/ps)*100,1),'ratio',round(ratio,3))
-    for r in sorted(rows,key=lambda r:-r[3])[:28]: print(f'{r[1][:38]:38} q{r[2]:5.0f} R{r[3]:7.0f} cost{r[4]:7.0f} GP{(1-r[4]/r[3])*100:5.1f}% {r[5]}')

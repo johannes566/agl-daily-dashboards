@@ -11,6 +11,7 @@ import { xeroGetAllPages } from './xero.js';
 import { withCompany, COMPANIES } from './company.js';
 import { hasTokens, readTokens } from './tokens.js';
 import { seedTokens } from './seed.js';
+import { shapeInvoice, shapeQuote, shapeBankTransaction } from './shape.js';
 import { selfTest } from './selftest.js';
 
 const PORT = Number(process.env.PORT || 8080);
@@ -19,6 +20,8 @@ const ALLOWED = { // path -> collection key in Xero's reply
   '/Invoices': 'Invoices', '/Quotes': 'Quotes', '/Payments': 'Payments',
   '/BankTransactions': 'BankTransactions', '/Contacts': 'Contacts',
 };
+
+const SHAPE = { '/Invoices': shapeInvoice, '/Quotes': shapeQuote, '/BankTransactions': shapeBankTransaction };
 
 const seedReport = seedTokens();
 console.log('token seed:', JSON.stringify(seedReport));
@@ -46,7 +49,7 @@ createServer(async (req, res) => {
       const params = {};
       for (const [k, v] of url.searchParams) if (!['company', 'path'].includes(k)) params[k] = v;
       const result = await withCompany(company, () => xeroGetAllPages(config, path, ALLOWED[path], params));
-      return send(res, 200, { company, path, requests: result.requests, count: result.items.length, items: result.items });
+      return send(res, 200, { company, path, requests: result.requests, count: result.items.length, items: SHAPE[path] ? result.items.map(SHAPE[path]) : result.items });
     }
     send(res, 404, { error: 'not found' });
   } catch (e) {

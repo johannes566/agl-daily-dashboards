@@ -299,3 +299,35 @@ export function shapeBankStatement(body) {
     otherRows,
   };
 }
+
+
+/** Sales invoices and supplier bills. netAmount is the line value EXCLUDING VAT. */
+export function shapeInvoice(i) {
+  const inclusive = i.LineAmountTypes === 'Inclusive';
+  return {
+    invoiceId: i.InvoiceID ?? null,
+    invoiceNumber: i.InvoiceNumber ?? null,
+    type: i.Type ?? null,
+    status: i.Status ?? null,
+    date: xeroDate(i.DateString || i.Date) || null,
+    dueDate: xeroDate(i.DueDateString || i.DueDate) || null,
+    ...reference(i.Reference),
+    contact: contact(i.Contact),
+    lineAmountTypes: i.LineAmountTypes ?? null,
+    subTotal: num(i.SubTotal),
+    totalTax: num(i.TotalTax),
+    total: num(i.Total),
+    amountDue: num(i.AmountDue),
+    amountPaid: num(i.AmountPaid),
+    lineItems: (i.LineItems || []).map((li) => ({
+      itemCode: li.ItemCode ?? null,
+      description: li.Description ?? null,
+      quantity: num(li.Quantity),
+      unitAmount: num(li.UnitAmount),
+      lineAmount: num(li.LineAmount),
+      taxAmount: num(li.TaxAmount),
+      netAmount: inclusive ? num(li.LineAmount) - (num(li.TaxAmount) || 0) : num(li.LineAmount),
+      accountCode: li.AccountCode ?? null,
+    })),
+  };
+}
