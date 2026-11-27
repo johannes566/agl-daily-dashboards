@@ -1,0 +1,32 @@
+# ---------------------------------------------------------------
+# SECRETS — never commit these. This file exists before any secret
+# is created, so a secret cannot be committed even by accident.
+# ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.env
+
+# OAuth tokens (these normally live OUTSIDE this repo in
+# ~/.agl-xero-bridge/, but belt-and-braces in case of a stray copy)
+tokens.json
+*.tokens.json
+.xero-*
+.agl-xero-*
+
+# Node
+node_modules/
+dist/
+*.log
+npm-debug.log*
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+/data/
+out/
+__pycache__/
+*.pyc
