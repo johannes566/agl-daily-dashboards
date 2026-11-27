@@ -115,4 +115,4 @@ _j.dump({'date':TODAY.isoformat(),'basket':round(bsk,2),'gp':round(bsk-_cost,2),
  'priced_share_general':round(ri[2]/ri[0]*100,1) if ri[0] else 0,'priced_share_general_quote':round(rq[2]/rq[0]*100,1) if rq[0] else 0,
  'priced_share_hamper':round(hi[2]/hi[0]*100,1) if hi[0] else 0,'priced_share_hamper_quote':round(hq[2]/hq[0]*100,1) if hq[0] else 0,
  'fixed_spent':round(FXS,2),'fixed_budget':round(FXB,2),'target':tgt,'gap':round(max(0,tgt-bsk),2),'trading_days_left':rem,
- 'invoice_total':round(inv_g+inv_h,2),'quote_total':round(q_g+q_h,2),'issues':D.ISSUES,'notes':D.NOTES,'pdf':OUT},open(os.path.join(OUTDIR,'bcs_summary.json'),'w'),indent=1)
+ 'invoice_total':round(inv_g+inv_h,2),'quote_total':round(q_g+q_h,2),'detail':{'invoices':len(D.INV),'invoice_numbers':[n for n,_,_ in D.INV][-12:],'quotes':len(D.QS),'quote_numbers_totals':[(q['quoteNumber'],q['date'],round(sum(float(l.get('lineAmount') or 0) for l in q['lineItems']),2)) for q in D.QS],'matched':[m[:2] for m in D.MATCHED],'bank_rows':len(D.rows)},'issues':D.ISSUES,'notes':D.NOTES,'pdf':OUT},open(os.path.join(OUTDIR,'bcs_summary.json'),'w'),indent=1)

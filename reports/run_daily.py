@@ -29,7 +29,8 @@ if p.returncode != 0:
     print(p.stdout[-1500:], p.stderr[-1500:])
     hold('the report builder crashed (' + (p.stderr.strip().splitlines() or ['unknown'])[-1][:120] + ')')
 s = json.load(open(os.path.join(OUT_DIR, 'bcs_summary.json')))
-print('built:', json.dumps({k: s[k] for k in ('basket', 'gp_pct', 'fixed_spent', 'gap')}))
+print('built:', json.dumps({k: s[k] for k in ('basket', 'gp_pct', 'fixed_spent', 'gap', 'invoice_total', 'quote_total')}))
+print('detail:', json.dumps(s.get('detail', {})))
 
 # ---- send gate ----
 problems = list(s['issues'])

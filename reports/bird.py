@@ -29,7 +29,7 @@ def upload_pdf(path):
     code, js = _req('POST', '/v1/assets', body, {'Content-Type': f'multipart/form-data; boundary={boundary}'})
     url = js.get('url') or (js.get('asset') or {}).get('url')
     if code >= 300 or not url:
-        raise RuntimeError(f'Bird upload failed (HTTP {code})')
+        raise RuntimeError(f'Bird upload failed (HTTP {code}): ' + json.dumps({k: js.get(k) for k in ('code', 'message', 'error', 'detail', 'title') if js.get(k)})[:300])
     return url
 
 
