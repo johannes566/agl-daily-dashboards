@@ -38,3 +38,14 @@ def send_template(to, slug, parameters, key, tags=None):
     code, js = _req('POST', '/v1/whatsapp/messages', json.dumps(payload).encode(),
                     {'Content-Type': 'application/json', 'Idempotency-Key': key})
     return code, js
+
+
+def public_link(path):
+    """Link served by this service (needs PUBLIC_BASE_URL). Unguessable: HMAC of the file name."""
+    import hmac, hashlib
+    base = os.environ.get('PUBLIC_BASE_URL', '').rstrip('/')
+    if not base:
+        return None
+    name = os.path.basename(path)
+    sig = hmac.new(os.environ['INTERNAL_KEY'].encode(), name.encode(), hashlib.sha256).hexdigest()[:40]
+    return f'{base}/r/{sig}/{name}'

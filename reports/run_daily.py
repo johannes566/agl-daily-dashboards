@@ -49,7 +49,7 @@ if problems:
     hold('; '.join(problems)[:600])
 
 # ---- deliver ----
-url = bird.upload_pdf(s['pdf'])
+url = bird.public_link(s['pdf']) or bird.upload_pdf(s['pdf'])
 fname = os.path.basename(s['pdf'])
 name = 'Butlers Catering Daily Finance Dashboard'
 headline = f"Sales basket {R(s['basket'])} ex VAT at {s['gp_pct']}% GP. {R(s['gap'])} short of the {R(s['target'])} target, {s['trading_days_left']} trading days left."
