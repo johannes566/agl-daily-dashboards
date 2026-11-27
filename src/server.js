@@ -13,6 +13,7 @@ import { hasTokens, readTokens } from './tokens.js';
 import { seedTokens } from './seed.js';
 import { shapeInvoice, shapeQuote, shapeBankTransaction } from './shape.js';
 import { selfTest } from './selftest.js';
+import { startScheduler } from './scheduler.js';
 
 const PORT = Number(process.env.PORT || 8080);
 const INTERNAL_KEY = process.env.INTERNAL_KEY || '';
@@ -55,4 +56,4 @@ createServer(async (req, res) => {
   } catch (e) {
     send(res, 500, { error: e.message });
   }
-}).listen(PORT, () => { console.log(`listening on ${PORT}`); selfTest(config); });
+}).listen(PORT, () => { console.log(`listening on ${PORT}`); selfTest(config); startScheduler(); });
