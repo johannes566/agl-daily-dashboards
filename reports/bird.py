@@ -34,7 +34,7 @@ def upload_pdf(path):
 
 
 def send_template(to, slug, parameters, key, tags=None):
-    payload = {'from': FROM, 'to': to, 'template': {'slug': slug, 'language': 'en', 'parameters': parameters}, 'tags': tags or {'category': 'daily_report'}}
+    payload = {'from': FROM, 'to': to, 'template': {'slug': slug, 'language': 'en', 'parameters': parameters}, 'tags': tags or ['daily_report']}
     code, js = _req('POST', '/v1/whatsapp/messages', json.dumps(payload).encode(),
                     {'Content-Type': 'application/json', 'Idempotency-Key': key})
     if code >= 300:
