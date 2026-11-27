@@ -45,9 +45,11 @@ def send_template(to, slug, parameters, key, tags=None):
 def public_link(path):
     """Link served by this service (needs PUBLIC_BASE_URL). Unguessable: HMAC of the file name."""
     import hmac, hashlib
-    base = os.environ.get('PUBLIC_BASE_URL', '').rstrip('/')
+    base = os.environ.get('PUBLIC_BASE_URL', '').strip().rstrip('/')
     if not base:
         return None
+    if not base.startswith('http'):
+        base = 'https://' + base
     name = os.path.basename(path)
     sig = hmac.new(os.environ['INTERNAL_KEY'].encode(), name.encode(), hashlib.sha256).hexdigest()[:40]
     return f'{base}/r/{sig}/{name}'
